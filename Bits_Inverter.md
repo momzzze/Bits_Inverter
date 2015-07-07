@@ -12,30 +12,47 @@ namespace Bits_Inverter
         
         static void Main()
         {
+            
             int Howmanynumber=int.Parse(Console.ReadLine());
             int step=int.Parse(Console.ReadLine());
             int number=0;
+            int count = 0, count2 = 7;
             List<int> New = new List<int>();
             List<int> Combination = new List<int>();
             List<int> Numbers = new List<int>();
             List<int> Boring = new List<int>();
+            List<int> SeparatingTheList = new List<int>();
+            List<int> SeparatingInOneList = new List<int>();
             for (int i = 0; i < Howmanynumber; i++)
 			{
 			 number=int.Parse(Console.ReadLine());
              Numbers.Add(number);
             
 			}
-            Console.WriteLine(string.Join(",",Numbers));
+            
             for (int i = 0; i < Numbers.Count; i++)
             {
                 int[] array = ConvertToBinary(Numbers[i]);
-                New = ConvertAndAddArryaToList(array);
+                New = ConvertArryaToList(array);
                 Combination.AddRange(New);
+                
 
             }
-            Console.WriteLine(string.Join(",", Combination));
-            Boring=Inverte(Combination,step);
-            Console.WriteLine(string.Join(",", Boring));
+            
+            Boring = Inverte(Combination, step);
+            
+            for (int i = count; i < Boring.Count; i++)
+            {
+                while (count2 < Boring.Count)
+                {
+                    SeparatingInOneList=SeparatedList(SeparatingTheList, count, count2, Boring);
+                    SeparatingInOneList.Reverse();
+                    ConvertToDecimal(SeparatingInOneList);
+                    count += 8;
+                    count2 = count + 7;
+                }
+                
+            }
         
         
         }
@@ -44,7 +61,7 @@ namespace Bits_Inverter
             int newnumb = 0;
             int[] zero = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, };
             int[] m = new int[zero.Length];
-            for (int i = 0; i < zero.Length - 1; i++)
+            for (int i = 0; i < zero.Length ; i++)
             {
 
                 newnumb = numb % 2;
@@ -55,7 +72,7 @@ namespace Bits_Inverter
             Array.Reverse(m);
             return m;
         }
-        static List<int> ConvertAndAddArryaToList(int[] m)
+        static List<int> ConvertArryaToList(int[] m)
         {
             List<int> New = new List<int>();
             for (int i = 0; i < m.Length ; i++)
@@ -80,7 +97,50 @@ namespace Bits_Inverter
             }
             return Combination;
         }
+        static List<int> SeparatedList(List<int> ojas,int count,int count2,List<int> Boring)
+        {
+            List<int> Separated = new List<int>();
+            for (int i = count; i < Boring.Count; i++)
+            {
+                Separated.Add(Boring[i]);
+                if (i == count2)
+                {
+                    
+                    break;
+                }
 
+            } return Separated;
+        }
+        static void ConvertToDecimal(List<int> SeparatingInOneList)
+        {
+            int number=0;
+            int sum=0;
+           for (int i = 0; i<SeparatingInOneList.Count; i++)       
+            {
+                if (SeparatingInOneList[i] != 0)
+                {
+                    number = Grade(SeparatingInOneList[i] * 2, i);
+                }
+                else
+                {
+                    number = 0;
+                }
+                sum += number;
+            }
+            Console.WriteLine(sum);
+            
+        }
+        static int Grade(int n, int grades)
+        {
+            int counter = 1;
+            for (int i = 1; i <= grades; i++)
+            {
+
+                counter *= n;
+            }
+            return counter;
+        }
+        
+       
     }
 }
-
